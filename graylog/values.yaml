@@ -87,10 +87,10 @@ elasticsearch:
 
   # Review the Elasticsearch Helm Chart for additional values you can set here.
 
-  appVersion: "5.6.11" # 5.6.11 is the latest Elasticsearch release compatibile with Graylog
+  appVersion: "5.6" # 5.6.11 is the latest Elasticsearch release compatibile with Graylog
 
   image:
-    tag: "5.6.11"
+    tag: "5.6"
 
   ports:
     discovery: 9300
