@@ -20,6 +20,6 @@ spec:
   - name: {{ $port.name }}
     protocol: {{ $port.protocol }}
     port: {{ $port.port }}
-    targetPort: {{ $port.ports }}
+    targetPort: {{ $port.port }}
   {{- end }}
   type: NodePort
