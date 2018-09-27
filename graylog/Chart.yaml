@@ -1,12 +1,13 @@
 apiVersion: v1
 name: graylog
-version: 0.1.10
-description: PI's deployment of Graylog
+version: 0.1.11
+description: This Umbrella Helm Chart deploys Graylog, with a MongoDB ReplicaSet & HA Elasticsearch Cluster backend.
 keywords:
   - graylog
+  - mongodb
+  - elasticsearch
   - siem
 maintainers:
   - name: Chris Bosman
-    email: cbosman@predictiveindex.com
+    email: christopher.r.bosman@gmail.com
 appVersion: 1.0.0
-icon: https://www.predictiveindex.com/hubfs/leanlabs/img/dev/logo-white.svg
