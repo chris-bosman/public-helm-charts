@@ -77,30 +77,30 @@ graylog:
   startupPassword: dummy3
 
 nginx-ingress:
-
-  # Review the Nginx-Ingress Helm Chart for additional values you can set here.
-  
+  # Review the Nginx-Ingress Helm Chart for additional values you can set here. https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml
   replicaCount: 2
   minAvailable: 1
 
 elasticsearch:
-
-  # Review the Elasticsearch Helm Chart for additional values you can set here.
-
+  # Review the Elasticsearch Helm Chart for additional values you can set here: https://github.com/helm/charts/blob/master/incubator/elasticsearch/values.yaml
   appVersion: "5.6" # 5.6 is the latest Elasticsearch release compatibile with Graylog
 
   image:
     repository: "docker.elastic.co/elasticsearch/elasticsearch" # By default the Elasticsearch Helm Chart uses the elasticsearch-oss image; however, this image only exists for Docker images with a tag 6.3 or later, so we have to substitute it here.
     tag: "5.6"
 
+  cluster:
+    xpackEnable: false
+    env:
+      MINIMUM_MASTER_NODES: "2"
+
   ports:
     discovery: 9300
     web: 9200
 
 mongodb-replicaset:
+  # Review the MongoDB ReplicaSet Helm Chart for additional values you can set here. https://github.com/helm/charts/blob/master/stable/mongodb-replicaset/values.yaml
   replicas: 3
-
-  # Review the MongoDB ReplicaSet Helm Chart for additional values you can set here.
 
   port: 27017
 
