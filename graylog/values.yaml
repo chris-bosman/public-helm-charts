@@ -34,13 +34,13 @@ graylog:
       protocol: TCP
     - name: gelf-udp
       port: 12201
-      protocl: UDP
+      protocol: UDP
     - name: gelf-http
       port: 12202
       protocol: TCP
     - name: syslog-udp
       port: 1514
-      protocl: UDP
+      protocol: UDP
     - name: syslog-tcp
       port: 1514
       protocol: TCP
