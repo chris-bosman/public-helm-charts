@@ -1,0 +1,12 @@
+dependencies:
+- name: elasticsearch
+  repository: https://kubernetes-charts-incubator.storage.googleapis.com
+  version: 1.7.0
+- name: mongodb-replicaset
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 3.5.6
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 0.28.2
+digest: sha256:cec6686843345e10577fa4929a7460c3a58c3b0c18c85be83f44ccd021f9feb8
+generated: 2018-09-27T14:44:28.856754603-05:00

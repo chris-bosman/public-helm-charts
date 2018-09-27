@@ -15,5 +15,5 @@ spec:
   ports:
   - name: http
     protocol: TCP
-    port: {{ .Values.graylog.ports.internal.port }}
+    port: {{ .Values.graylog.webPorts.internal }}
   clusterIP: None

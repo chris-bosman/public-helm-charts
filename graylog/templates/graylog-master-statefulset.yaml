@@ -29,9 +29,9 @@ spec:
                 values:
                 - slave
             topologyKey: kubernetes.io/hostname
-      {{- if .Values.image.pullSecrets }}
+      {{- if .Values.graylog.image.pullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.image.pullSecrets }}
+      - name: {{ .Values.graylog.image.pullSecrets }}
       {{- end }}
       containers:
         - name: graylog-master

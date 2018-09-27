@@ -1,6 +1,6 @@
 dependencies:
   - name: elasticsearch
-    repository: https://kubernetes-chart-incubator.storage.googleapis.com
+    repository: https://kubernetes-charts-incubator.storage.googleapis.com
     version: 1.7.0
   - name: mongodb-replicaset
     repository: https://kubernetes-charts.storage.googleapis.com

@@ -1,7 +1,7 @@
-{{- define "mongo.connectionString" -}}
+{{- define "mongo.connectionStringPrimary" -}}
 {{- $nodes := dict "servers" (list) -}}
-{{- range int . | until -}}
-{{- $noop := printf "mongodb://%s:%s@%s-mongodb-replicaset-%d.mongodb-replicaset.%s.svc.cluster.local" .Values.mongodb-replicaset.adminUser .Values.mongodb-replicaset.adminPassword .Release.Name .Release.Namespace .Values.mongodb-replicaset.port .Values.mongodb-replicaset.replicaSetName | append $nodes.servers -}}
+{{- range int (index .Values "mongodb-replicaset" "replicas") | until -}}
+{{- $noop := printf "mongodb://%s:%s@%s-mongodb-replicaset-%d.mongodb-replicaset.%s.svc.cluster.local:%s" (index $.Values "mongodb-replicaset" "adminUser") (index $.Values "mongodb-replicaset" "adminPassword") $.Release.Name $.Release.Namespace (index $.Values "mongodb-replicaset" "port") | append $nodes.servers | set $nodes "servers" -}}
 {{- end -}}
 {{- join "," $nodes.servers -}}
 {{- end -}}

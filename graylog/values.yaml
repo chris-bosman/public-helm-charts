@@ -1,3 +1,4 @@
+
 graylog:
 
   slaveReplicas: 1
@@ -73,7 +74,7 @@ graylog:
       tlsSecret: # Provide the name of the secret containing your TLS certificate here. Note that the secret must be prepopulated into the cluster.
     url: graylog.example.com
 
-  startupPassword: 
+  startupPassword: dummy3
 
 nginx-ingress:
 
@@ -96,6 +97,7 @@ elasticsearch:
     web: 9200
 
 mongodb-replicaset:
+  replicas: 3
 
   # Review the MongoDB ReplicaSet Helm Chart for additional values you can set here.
 
@@ -106,5 +108,5 @@ mongodb-replicaset:
   auth:
     enabled: true # We're enabling auth by default for security.
     adminUser: graylog
-    adminPassword: 
-    key: # Randomly generate this with `openssl rand -base64 756`
+    adminPassword: dummy
+    key: dummy2 # Randomly generate this with `openssl rand -base64 756`
