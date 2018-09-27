@@ -3,7 +3,7 @@ entries:
   auth0forwarder:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2018-09-27T15:51:21.150366243-05:00
+    created: 2018-09-27T16:06:59.670738361-05:00
     description: Container for forwarding logs from Auth0 to Graylog
     digest: 4857b70ed360205d1f855209ac38206eb29c698f901ae74bb6b09ec3f2f6991a
     icon: https://www.predictiveindex.com/hubfs/leanlabs/img/dev/logo-white.svg
@@ -21,9 +21,9 @@ entries:
   graylog:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2018-09-27T15:51:21.152582865-05:00
+    created: 2018-09-27T16:06:59.673205142-05:00
     description: PI's deployment of Graylog
-    digest: 91a1931c61def7ed4a6d17f3bbf6c0658b0b7e52656db340c536e46aaa67a36d
+    digest: 0eb30e3ce680fe28c68fd1fcdf61f70edd22c7e777620b882e2a4c231f04c2bc
     icon: https://www.predictiveindex.com/hubfs/leanlabs/img/dev/logo-white.svg
     keywords:
     - graylog
@@ -33,6 +33,6 @@ entries:
       name: Chris Bosman
     name: graylog
     urls:
-    - graylog/graylog-0.1.3.tgz
-    version: 0.1.3
-generated: 2018-09-27T15:51:21.148971213-05:00
+    - graylog/graylog-0.1.5.tgz
+    version: 0.1.5
+generated: 2018-09-27T16:06:59.670081164-05:00

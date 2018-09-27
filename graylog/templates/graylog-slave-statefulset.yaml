@@ -31,11 +31,11 @@ spec:
             topologyKey: kubernetes.io/hostname
       {{- if .Values.graylog.image.pullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.image.pullSecrets }}
+      - name: {{ .Values.graylog.image.pullSecrets }}
       {{- end }}
       containers:
         - name: graylog-slave
-          image: "{{ .Values.graylog.image.registry }}:{{ .Values.graylog.image.tag }}"
+          image: "{{ .Values.graylog.image.repository }}:{{ .Values.graylog.image.tag }}"
           env:
           - name: GRAYLOG_PASSWORD_SECRET
             valueFrom:

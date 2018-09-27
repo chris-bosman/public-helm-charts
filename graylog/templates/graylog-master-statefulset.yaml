@@ -35,7 +35,7 @@ spec:
       {{- end }}
       containers:
         - name: graylog-master
-          image: "{{ .Values.graylog.image.registry }}:{{ .Values.graylog.image.tag }}"
+          image: "{{ .Values.graylog.image.repository }}:{{ .Values.graylog.image.tag }}"
           env:
           - name: GRAYLOG_PASSWORD_SECRET
             valueFrom:
