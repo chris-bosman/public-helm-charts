@@ -78,8 +78,30 @@ graylog:
 
 nginx-ingress:
   # Review the Nginx-Ingress Helm Chart for additional values you can set here. https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml
+  config: {}
+  headers: {}
+  podLabels: {}
+  extraArgs: {}
+  extraEnvs: []
+
   replicaCount: 2
   minAvailable: 1
+
+  autoscaling:
+    enabled: false
+
+  customTemplate:
+    configMapName: ""
+    configMapKey: ""
+
+  stats:
+    enabled: false
+
+  metrics:
+    enabled: false
+
+  podSecurityPolicy:
+    enabled: false
 
 elasticsearch:
   # Review the Elasticsearch Helm Chart for additional values you can set here: https://github.com/helm/charts/blob/master/incubator/elasticsearch/values.yaml
@@ -101,13 +123,21 @@ elasticsearch:
 mongodb-replicaset:
   # Review the MongoDB ReplicaSet Helm Chart for additional values you can set here. https://github.com/helm/charts/blob/master/stable/mongodb-replicaset/values.yaml
   replicas: 3
-
   port: 27017
-
   replicaSetName: rs0
 
   auth:
-    enabled: true # We're enabling auth by default for security.
-    adminUser: graylog
-    adminPassword: dummy
-    key: dummy2 # Randomly generate this with `openssl rand -base64 756`
+    enabled: false # We're enabling auth by default for security.
+    adminUser: 
+    adminPassword: 
+    key: # Randomly generate this with `openssl rand -base64 756`
+
+  extraVars: {}
+
+  metrics:
+    enabled: false
+
+  tls:
+    enabled: false
+  
+  configmap:
