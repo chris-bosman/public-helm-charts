@@ -1,6 +1,6 @@
 # Auth0Forwarder Helm Chart
 
-* Installs all necessary components to run the containerized auth0-to-graylog2 container as described here.
+* Installs all necessary components to run the containerized auth0-to-graylog2 container as described [here](https://github.com/chris-bosman/auth0-logs-graylog2/blob/master/README.md).
 
 ## TL;DR
 
