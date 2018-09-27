@@ -87,9 +87,10 @@ elasticsearch:
 
   # Review the Elasticsearch Helm Chart for additional values you can set here.
 
-  appVersion: "5.6" # 5.6.11 is the latest Elasticsearch release compatibile with Graylog
+  appVersion: "5.6" # 5.6 is the latest Elasticsearch release compatibile with Graylog
 
   image:
+    repository: "docker.elastic.co/elasticsearch/elasticsearch" # By default the Elasticsearch Helm Chart uses the elasticsearch-oss image; however, this image only exists for Docker images with a tag 6.3 or later, so we have to substitute it here.
     tag: "5.6"
 
   ports:
