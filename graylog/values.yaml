@@ -1,0 +1,110 @@
+graylog:
+
+  slaveReplicas: 1
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+
+  image:
+    repository: "graylog/graylog"
+    tag: "2.4"
+    #pullSecret: If you are using a custom image, provide the name of the secret that allows access to that Docker Registry hear. Note that the secret must be pre-popultead into the cluster.
+
+  config: []
+  # You can add additional configuration to your Graylog deployment by adjusting the config here.
+  # All configurable options are documented at http://docs.graylog.org/en/2.4/pages/configuration/server.conf.html
+  # For example, to enable CORS for both web and API, delete the [] above and uncomment the lines below.
+  #  - name: HTTP_ENABLE_CORS
+  #    value: true
+  #  - name: REST_ENABLE_CORS
+  #    value: true
+
+  webPorts:
+    external: 80
+    internal: 9000
+
+  inputPorts: 
+  # If you want to configure more inputs, add their ports here. If you plan to use a GELF input type to ingest this input, ensure the name contains "gelf", or it will not be properly configured to receive traffic.
+    - name: gelf-tcp
+      port: 12201
+      protocol: TCP
+    - name: gelf-udp
+      port: 12201
+      protocl: UDP
+    - name: gelf-http
+      port: 12202
+      protocol: TCP
+    - name: syslog-udp
+      port: 1514
+      protocl: UDP
+    - name: syslog-tcp
+      port: 1514
+      protocol: TCP
+
+  resources:
+    requests:
+      cpu: .25
+      memory: 1024Mi
+    limits:
+      cpu: .75
+      memory: 1536Mi
+
+  readinessProbe:
+    httpGet:
+      path: /api/system/lbstatus
+      port: 9000
+    initialDelaySeconds: 30
+    periodSeconds: 3
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 4
+
+  persistentVolumeClaim:
+    accessModes: [ "ReadWriteOnce" ]
+    storageClassName: "default"
+    diskSize: 10Gi 
+
+  host:
+    https:
+      enabled: false
+      tlsSecret: # Provide the name of the secret containing your TLS certificate here. Note that the secret must be prepopulated into the cluster.
+    url: graylog.example.com
+
+  startupPassword: 
+
+nginx-ingress:
+
+  # Review the Nginx-Ingress Helm Chart for additional values you can set here.
+  
+  replicaCount: 2
+  minAvailable: 1
+
+elasticsearch:
+
+  # Review the Elasticsearch Helm Chart for additional values you can set here.
+
+  appVersion: "5.6.11" # 5.6.11 is the latest Elasticsearch release compatibile with Graylog
+
+  image:
+    tag: "5.6.11"
+
+  ports:
+    discovery: 9300
+    web: 9200
+
+mongodb-replicaset:
+
+  # Review the MongoDB ReplicaSet Helm Chart for additional values you can set here.
+
+  port: 27017
+
+  replicaSetName: rs0
+
+  auth:
+    enabled: true # We're enabling auth by default for security.
+    adminUser: graylog
+    adminPassword: 
+    key: # Randomly generate this with `openssl rand -base64 756`

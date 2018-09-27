@@ -1,0 +1,5 @@
+files:
+  - path: Chart.yaml
+    pattern: "version: (.*)"
+exec_before: []
+exec_after: []

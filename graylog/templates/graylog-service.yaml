@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-services
+  labels:
+    app: {{ .Release.Name }}
+    component: services
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    app: {{ .Release.Name }}
+  ports:
+  - name: http
+    protocol: TCP
+    port: {{ .Values.graylog.webPorts.external }}
+    targetPort: {{ .Values.graylog.webPorts.internal }}
+    nodePort: 31300
+  {{- range $i, $port := .Values.graylog.inputPorts }}
+  - name: {{ $port.name }}
+    protocol: {{ $port.protocol }}
+    port: {{ $port.port }}
+    targetPort: {{ $port.ports }}
+  {{- end }}
+  type: NodePort

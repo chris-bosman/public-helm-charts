@@ -1,0 +1,39 @@
+# To use this helm chart, you will have to 
+image:
+  registry: racecarbrown
+  name: auth0forwarder
+  tag: 0.1
+  # If you are using your own image in a private repository, you will have to provide the name of the secret for your repo here. Please note that this secret will have to be pre-pouplated into the Kubernetes cluster
+  # pullSecrets: 
+
+pod:
+  resources: {}
+    #requests:
+      #cpu: "100m"
+      #memory: "128Mi"
+    #limits:
+      #cpu: "100m"
+      #memory: "128Mi"
+
+auth:
+  clientId: # Auth0 ClientID
+  clientSecret: # Auth0 Client Secret
+  domain: # Auth0 Client Domain
+
+forwarder:
+  batchSize: 100 # Max = 100
+  startFrom: 0 # Entry must be an integer, or logs will fail to parse. 
+  pollingInt: 30 # Interval in seconds that the forwarder will send a log batch to Graylog
+  trackInt: 600 # Once the forwarder reaches the end of your Auth0 logs, it will wait this interval (again in seconds) before attempting to send a new batch
+  clientFilter: 
+    enabled: false # Change to true to enable log filtering baase don Auth0 client IDs
+    #ids: # You can enter a comma delimited list of Auth0 client IDs here to filter out of your Graylog logs
+  localLogging: 
+    enabled: false # Change to true to enable logs being saved to locally-accessible persistent storage. The path will be /app/logs/auth0.logs
+    #storageSpace: 10Gi
+    #storageClass: default
+
+graylog:
+  host: http://graylog.example.com # Graylog GELF HTTP URL
+  port: 12201 # Graylog GELF HTTP Port
+  metadata: auth0 # Anything you enter here will appear in relevant Graylog log entries as "meta: <this field>"

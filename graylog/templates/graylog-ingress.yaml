@@ -1,0 +1,33 @@
+{{- if .Values.graylog.ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    component: ingress
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+{{ toYaml .Values.graylog.ingress.annotations | indent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.graylog.host.url }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-services
+          servicePort: {{ .Values.graylog.webPorts.external }}
+        path: /
+      {{- range $i, $port := .Values.graylog.inputPorts }}
+      - backend:
+          serviceName: {{ $.Release.Name }}-services
+          servicePort: {{ $port.port }}
+        path: {{- if contains "gelf" $port.name }}/gelf{{- else }}/
+      {{- end }}
+  {{- if .Values.graylog.host.https.enabled }}
+  tls:
+  - secretName: {{ .Values.graylog.host.https.tlsSecret }}
+    hosts:
+    - {{ .Values.graylog.host.url }}

@@ -1,0 +1,5 @@
+You have successfully deployed a forwarder container for transporting your Auth0 logs from Auth0 to Graylog.
+
+To ensure correct configuration, you will want to check on the logs of your container by running the following command:
+
+kubectl logs -l "app={{ .Release.Name }}" --namespace {{ .Release.Namespace }}

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    release: {{ .Release.Name }}
+  namespace: {{ .Values.app.namespace }}
+spec:
+  replicas: 1 # Do not change this. This app does not have the ability to distribute the load of forwarding logs, and the presence of any additional containers will result in duplicate logs.
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          env:
+            - name: AUTH0_CLIENT_ID
+              value: {{ .Values.auth.clientId }}
+            - name: AUTH0_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Release.Name }}-clientSecret
+                    key: clientSecret
+            - name: AUTH0_DOMAIN
+              value: {{ .Values.auth.clientSecret }}
+            - name: BATCH_SIZE
+              value: {{ .Values.forwarder.batchSize }}
+            - name: START_FROM_ID
+              value: {{.Values.forwarder.startFrom }}
+            - name: POLLING_INTERVAL_IN_SEC
+              value: {{ .Values.forwarder.pollingInt }}
+            - name: TRACK_THE_LATEST_IN_SEC
+              value: {{ .Values.forwarder.trackInt }}
+            {{- if .Values.forwarder.clientFilter.enabled }}
+            - name: FILTER_CLIENTS_WITH_ID
+              value: {{ .Values.forwarder.clientFilter.ids }}
+            {{- end }}
+            {{- if .Values.forwarder.localLogging.enabled }}
+            - name: FILELOG_ENABLE
+              value: true
+            - name: FILELOG_DIR
+              value: {{ .Values.forwarder.localLogging.logDirName }}
+            {{- end }}
+            - name: GRAYLOG2_HOST
+              value: {{ .Values.graylog.host }}
+            - name: GRAYLOG2_PORT
+              value: {{ .Values.graylog.port }}
+            - name: GRAYLOG2_META
+              value: {{ .Values.graylog.metadata }}
+          resources:
+            {{ toYaml .Values.pod.resources | indent 12 }}
+          {{- if .Values.forwarder.localLogging.enabled }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-logs
+              mountPath: "/app/logs"
+          {{- end }}
+        {{- if .Values.image.pullSecrets }}
+        imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}
+        {{- end }}
+        {{- if .Values.forwarder.localLogging.enabled }}
+        volumes:
+          - name: {{ .Release.Name }}-logs
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-logs
+        {{- end }}

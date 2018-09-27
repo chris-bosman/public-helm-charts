@@ -1,0 +1,97 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-slave
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    component: slave
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  serviceName: {{ .Release.Name }}-slave
+  replicas: {{ .Values.graylog.slaveReplicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        component: slave
+        release: {{ .Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 70
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: component
+                operator: In
+                values:
+                - master
+            topologyKey: kubernetes.io/hostname
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecrets }}
+      {{- end }}
+      containers:
+        - name: graylog-slave
+          image: "{{ .Values.graylog.image.registry }}:{{ .Values.graylog.image.tag }}"
+          env:
+          - name: GRAYLOG_PASSWORD_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secret
+                key: password
+          - name: GRAYLOG_ROOT_PASSWORD_SHA2
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secret
+                key: passwordsha
+          - name: GRAYLOG_MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secret
+                key: mongoConnectionString
+          - name: GRAYLOG_IS_MASTER
+            value: "false"
+          - name: GRAYLOG_ELASTICSEARCH_DISCOVERY_ZEN_PING_UNICAST_HOSTS
+            value: "elasticsearch-discovery.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.elasticsearch.ports.discovery }}"
+          - name: GRAYLOG_ELASTICSEARCH_HOSTS
+            value: "http://elasticsearch-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.elasticsearch.ports.web }}"
+          - name: GRAYLOG_WEB_LISTEN_URI
+            value: "http://0.0.0.0:{{ .Values.graylog.webPorts.internal }}"
+          - name: GRAYLOG_WEB_ENDPOINT_URL
+            value: "http{{- if .Values.graylog.host.https.enabled }}s{{- end}}://{{ .Values.graylog.url }}/api"
+          - name: GRAYLOG_REST_LISTEN_URI
+            value: "http://0.0.0.0:{{ .Values.graylog.webPorts.internal }}/api/"
+          - name: GRAYLOG_REST_TRANSPORT_URI
+            value: "http{{- if .Values.graylog.host.https.enabled }}s{{- end}}://{{ .Values.graylog.url }}/api/"
+          - name: GRAYLOG_SERVER_JAVA_OPTS
+            value: "-Xms1g -Xmx1g -XX:NewRatio=1 -XX:MaxMetaspaceSize=256m -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow"
+          {{- if .Values.graylog.config }}
+{{ toYaml .Values.graylog.config | indent 10 }}
+          {{- end }}
+          ports:
+          - containerPort: {{ .Values.graylog.webPorts.internal }}
+            name: http
+          {{- range $i, $port := .Values.graylog.inputPorts }}
+          - containerPort: {{ $port.port }}
+            name: {{ $port.name }}
+          {{- end }}
+          volumeMounts:
+          - name: {{ .Release.Name }}-pv
+            mountPath: /usr/share/graylog/data/journal
+            subPath: graylog
+          resources:
+{{ toYaml .Values.graylog.resources | indent 12 }}
+      readinessProbe:
+{{ toYaml .Values.graylog.readinessProbe | indent 8 }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Release.Name }}-pv
+    spec:
+      accessModes: {{ .Values.graylog.persistentVolumeClaim.accessModes }}
+      storageClassName: {{ .Values.graylog.persistentVolumeClaim.storageClassName }}
+      resources:
+        requests:
+          storage: {{ .Values.graylog.persistentVolumeClaim.diskSize }}
