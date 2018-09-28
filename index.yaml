@@ -3,7 +3,7 @@ entries:
   auth0forwarder:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2018-09-27T17:01:17.201050733-05:00
+    created: 2018-09-28T08:56:07.607197913-05:00
     description: Container for forwarding logs from Auth0 to Graylog
     digest: 4857b70ed360205d1f855209ac38206eb29c698f901ae74bb6b09ec3f2f6991a
     icon: https://www.predictiveindex.com/hubfs/leanlabs/img/dev/logo-white.svg
@@ -21,10 +21,10 @@ entries:
   graylog:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2018-09-27T17:01:17.20450377-05:00
+    created: 2018-09-28T08:56:07.609508309-05:00
     description: This Umbrella Helm Chart deploys Graylog, with a MongoDB ReplicaSet
       & HA Elasticsearch Cluster backend.
-    digest: f445aae27b78d803fc27a1c094d1d75312aba849b107a648db53dfd7c0ee1359
+    digest: 3f81dd1477a38cc4a378c9750481434c4152e6f15996a0b8c171657602e7c075
     keywords:
     - graylog
     - mongodb
@@ -35,6 +35,6 @@ entries:
       name: Chris Bosman
     name: graylog
     urls:
-    - graylog/graylog-0.1.11.tgz
-    version: 0.1.11
-generated: 2018-09-27T17:01:17.199044804-05:00
+    - graylog/graylog-0.1.12.tgz
+    version: 0.1.12
+generated: 2018-09-28T08:56:07.605640192-05:00
