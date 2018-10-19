@@ -65,7 +65,7 @@ graylog:
 
   persistentVolumeClaim:
     accessModes: [ "ReadWriteOnce" ]
-    storageClassName: "default"
+    storageClassName: # This will depend on your storage provider
     diskSize: 10Gi 
 
   host:
@@ -74,7 +74,7 @@ graylog:
       tlsSecret: # Provide the name of the secret containing your TLS certificate here. Note that the secret must be prepopulated into the cluster.
     url: graylog.example.com
 
-  startupPassword: dummy3
+  startupPassword: # Graylog requires its bootstrap password to be at least 16 characters.
 
 nginx-ingress:
   # Review the Nginx-Ingress Helm Chart for additional values you can set here. https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml
@@ -128,8 +128,8 @@ mongodb-replicaset:
 
   auth:
     enabled: false # We're enabling auth by default for security.
-    adminUser: 
-    adminPassword: 
+    adminUser: graylog
+    adminPassword: # Note that because mongo does exceptionally poorly with special charactes in passwords; a long alphanumeric password is recommended.
     key: # Randomly generate this with `openssl rand -base64 756`
 
   extraVars: {}
