@@ -1,0 +1,26 @@
+app:
+  name: generic
+image:
+  registry: yourapp
+  tag: apptag
+host:
+  url: https://yourapp.com
+ports:
+  external: 443
+  internal: 80
+replicas:
+  min: 2
+  max: 5
+metrics:
+  type: cpu
+  threshold: 50
+imageCredentials:
+  registry:
+  username:
+  password:
+cert:
+## If you're providing your own certificates, please use this to add the certificates as secrets
+## key and certificate should start with -----BEGIN CERTIFICATE----- or
+## -----BEGIN RSA PRIVATE KEY-----
+  key:
+  certificate:

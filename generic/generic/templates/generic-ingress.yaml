@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.app.name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  rules:
+  - host: {{ .Values.host.url }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.app.name }}
+          servicePort: {{ .Values.ports.external }}
+        path: /
+  tls:
+  - secretName: tls-cert
+    hosts:
+    - {{ .Values.host.url }}
