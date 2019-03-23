@@ -22,5 +22,5 @@ cert:
 ## If you're providing your own certificates, please use this to add the certificates as secrets
 ## key and certificate should start with -----BEGIN CERTIFICATE----- or
 ## -----BEGIN RSA PRIVATE KEY-----
-  key:
-  certificate:
+  key: 
+  certificate: 
